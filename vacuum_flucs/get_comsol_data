@@ -1,0 +1,3 @@
+#!/bin/sh
+
+scp -r galaxy:Documents/comsol_datafiles ../data_postprocess/downloads
