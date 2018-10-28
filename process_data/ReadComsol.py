@@ -37,3 +37,19 @@ class ReadComsol:
         y = np.asarray((y),dtype=float)
         z = np.asarray((z),dtype=float)
         return x,y,z
+
+    def read_full_data(self):
+	    x=[]
+	    y=[]
+	    z=[]
+	    with open(self.file, 'r') as rf:
+	        reader = csv.reader(rf, delimiter=',')
+	        for row in reader:
+	            x.append(row[0])
+	            # Remove header from csv file, if it exists
+	            if x[0].split()[0] == '%':
+	                x.remove(row[0])
+	            else:
+	                y.append(row[1])
+	                z.append(row[2])
+	    return x,y,z

@@ -3,7 +3,10 @@ import matplotlib.pyplot as plt
 import os
 
 class Plotting:		
-	def plot(x,y,*args, **kwargs):
+	def __init__(self):
+		return
+
+	def plot(self,x,y,*args, **kwargs):
 		colr = kwargs.get('colr','b')
 		xlab = kwargs.get('xlab','')
 		ylab = kwargs.get('ylab','')
@@ -18,6 +21,10 @@ class Plotting:
 		ax.grid()
 		plt.tight_layout()
 		plt.savefig(str(os.getcwd() + '/figs/' + filename))
+
+		self.conditions(show,save)
+
+	def conditions(self,show,save):
 		if show=='yes':
 			plt.show()
 		elif show=='no':

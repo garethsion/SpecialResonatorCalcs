@@ -16,8 +16,9 @@ class PostProcData:
         self.omega = params["omega"]
         self.Z = params["Z"]
             	
-    def single_spin_coupling(self,Bx,By):
-        ang = np.cos(0)
+    def single_spin_coupling(self,Bx,By,*args,**kwargs):
+        theta = kwargs.get('theta',0)
+        ang = np.cos(theta)
         ue = sp.physical_constants["Bohr magneton"][0]
         g = 0.47 * ue * np.sqrt(By**2 + (ang**2) * Bx**2)
         return g/sp.h
@@ -26,3 +27,11 @@ class PostProcData:
         volume = g * self.t * self.l
         rho =  sp.m_e / volume
         return rho
+
+    def cooperativity(self):
+        return
+
+    def finesse(self):
+        return
+
+    
