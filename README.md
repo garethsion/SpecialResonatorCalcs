@@ -1,3 +1,7 @@
+# Resonator QED calculations
+
+* This package contains a complete workflow for determining Quantum Electrodynamic properties of a given resonator structure.
+
 python setup.py install
 
 cd .ssh
