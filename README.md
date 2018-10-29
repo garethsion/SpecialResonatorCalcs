@@ -16,7 +16,13 @@ This package follows a complete workflow, generating the required data using sev
 4. J(x) is imported as a funnction into COMSOL, and the cross section of the resonator is simulated. Ampere's law is solved to determine the vacuum field fluctuations $\delta B(x)$ and \delta B(y)$.
 5. The field fluctuations are downloaded, and postprocessing can occur with Python.
 
+## Installation
+
+At the moment, the package can be downloaded directly from github 
+
 python setup.py install
+
+In order to completer the full workflow, it is necessary to allow ssh access to the required machines. I hope ultimately to change this so that I can do it automatically (i.e. the user does not have to enter the command - I will have a script which will do it for them)
 
 cd .ssh
 vim config
