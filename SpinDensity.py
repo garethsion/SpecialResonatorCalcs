@@ -5,6 +5,7 @@ import numpy as np
 import numpy.matlib
 import matplotlib.pyplot as plt
 from process_data import ReadComsol
+import Plotting
 
 # Read data from downloads
 file_dbx = os.getcwd() + '/data_postprocess/downloads/comsol_datafiles/Bx_fullData.csv'
@@ -51,13 +52,11 @@ hist = hist * Ncell # with 3d box
 hist = hist / sum(hist) # normalize
 edges = edges[0:len(hist)] # shift bin edges to get the same length as data
 
+plts = Plotting.Plotting()
 
-fig = plt.figure(figsize=(10,8))
-# plt.stem(edges,hist)
-plt.bar(edges,height=hist)
-plt.xlabel('$\\frac{g}{2\pi} (Hz)$',fontsize=24)
-plt.ylabel('$\\rho(g)$',fontsize=24)
-plt.show()
+plt1 = plts.barplot(edges,hist,colr='b',xlab='$\\frac{g}{2 \pi} (Hz)$',
+	ylab='$\\rho(g)$',filename='g_density.eps',
+	show='yes',save='yes')
 
 # # n, bins, patches = plt.hist(x=d, bins='auto', color='#0504aa',
 # # 	alpha=0.7, rwidth=0.85)

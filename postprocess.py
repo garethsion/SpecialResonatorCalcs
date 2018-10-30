@@ -2,6 +2,8 @@
 import matplotlib.pyplot as plt
 from process_data import ReadComsol,PostProcData
 import Plotting
+import numpy as np
+from scipy import constants as sp
 
 #read in 1d data from comsol for plotting
 bx = ReadComsol.ReadComsol('comsol_datafiles/Bx.csv')
@@ -19,10 +21,18 @@ xn = xn - max(xn)/2
 
 #calcualte single spin couplinng coefficient
 pp = PostProcData.PostProcData()
-g = pp.single_spin_coupling(Bx,By)
+g = pp.cut_line_single_spin_coupling(Bx,By)
 
-rho = pp.spin_density(g)
+rho = pp.cut_line_spin_density(g)
 rho = rho / sum(rho)
+
+
+lambda_c = 6e-03 # Will work out properly, but just testing for now
+epsilon_r = 11.9
+n = np.sqrt(epsilon_r) / sp.c # Dielectric constant
+Q = 20000 # Will get this data from CST
+F = pp.purcell_factor(lambda_c,n,Q)
+print(F)
 
 plts = Plotting.Plotting()
 

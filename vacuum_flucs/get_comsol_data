@@ -1,3 +1,8 @@
 #!/bin/sh
+# This bash script logs into the remote machine where the COMSOL calculations were performed, and downloads the required datafiles into the data_postprocessing directory
 
-scp -r galaxy:Documents/comsol_datafiles ../data_postprocess/downloads
+HOST="galaxy"
+#REMOTEDIR="/homes/gjones/COMSOL_files/output"
+REMOTEDIR="Documents/comsol_datafiles"
+DOWNLOADDIR="../data_postprocess/downloads"
+scp -r ${HOST}:${REMOTEDIR} ${DOWNLOADDIR}

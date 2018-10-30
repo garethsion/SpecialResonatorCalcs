@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#ssh gade 'bash -s' << /homes/gjones/COMSOL_files/job_test.sh input/cpw_vacuum_calcs.mph
+ssh gade pwd logout
+#cd COMSOL_files
+#./job input/cpw_vacuum_calcs.mph
+#logout

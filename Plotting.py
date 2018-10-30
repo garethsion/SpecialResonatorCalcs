@@ -24,6 +24,22 @@ class Plotting:
 
 		self.conditions(show,save)
 
+	def barplot(self,x,y,*args,**kwargs):
+		xlab = kwargs.get('xlab','')
+		ylab = kwargs.get('ylab','')
+		filename = kwargs.get('filename','file')
+		show = kwargs.get('show','yes')
+		save = kwargs.get('save','no')
+
+		fig, ax = plt.subplots(figsize=(6,4))
+		ax.bar(x,height=y)
+		ax.set_xlabel(xlab,fontsize='24')
+		ax.set_ylabel(ylab,fontsize='24')
+		plt.tight_layout()
+		plt.savefig(str(os.getcwd() + '/figs/' + filename))
+
+		self.conditions(show,save)
+
 	def conditions(self,show,save):
 		if show=='yes':
 			plt.show()

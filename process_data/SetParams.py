@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import os
+from subprocess import call
 
 class SetParams:
     def __init__(self):
@@ -65,3 +66,9 @@ class SetParams:
             )
 
          f.close()
+
+    def scp_params(self):
+        dir = str(os.getcwd()) + "/vacuum_flucs/set_comsol_data"
+        rc = call(dir)
+
+

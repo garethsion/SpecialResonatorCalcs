@@ -39,7 +39,9 @@ E = cpw.E()
 #calculate conductivity
 sigma = cpw.conductivity()
 
+#generate a parameter list for COMSOL modelling
 paramlist = setp.param_list(x,I,Jnorm)
+setp.scp_params()
 
 n = [abs(i) for i in x]
 idx = n.index(min(n))
