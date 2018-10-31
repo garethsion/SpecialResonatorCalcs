@@ -7,7 +7,7 @@ from process_data import SetParams
 import Plotting
 import os
 
-#define the superconductor
+# Define geometry of the superconductor
 setp = SetParams.SetParams()
 params = setp.set_params()
 w = params["w"]
@@ -15,52 +15,32 @@ t = params["t"]
 l = params["l"]
 pen = params["pen"]
 
-#define the resonator - from CST or experiment
+# Define resonator params
 omega = params["omega"]
 Z = params["Z"]
 
-#define the 'mesh'
+# Define the 'mesh'
 x = np.linspace(-w, w, int(1e04))
 
-#instantiate Special CPW object
+# Instantiate Special CPW object
 cpw = CPW.CPW(x,l,w,t,pen,Z,omega)
 
-#solve for currents - not normalised
-Js = cpw.J()
+Js = cpw.J() #s Current density - not normalised
+Jnorm = cpw.normalize_J() # Normalise 
+I = cpw.current(norm='no') # Current
+E = cpw.E() # Electric field
+sigma = cpw.conductivity() # Conductivity
 
-#normalise 
-Jnorm = cpw.normalize_J()
+# Generate a parameter list for COMSOL modelling
+paramlist = setp.param_list(x,I,Jnorm) # Generate COMSOL parameter list
+setp.scp_params() # securely copy the generated parameter to remote machine
 
-I = cpw.current(norm='no')
-
-#calculate electric field
-E = cpw.E()
-
-#calculate conductivity
-sigma = cpw.conductivity()
-
-#generate a parameter list for COMSOL modelling
-paramlist = setp.param_list(x,I,Jnorm)
-setp.scp_params()
-
-n = [abs(i) for i in x]
-idx = n.index(min(n))
-
-# I0 = I[idx]
-# J0 = I0/(2*(w+t)*pen)
-# pen_perp = pen**2 / (2*t)
-# C = (0.506*np.sqrt(w/(2*pen_perp)))**0.75
-# l1 = pen*np.sqrt(2*pen/pen_perp)
-# l2 = 0.774*pen**2/pen_perp + 0.5152*pen_perp
-# J2overJ1 = (1.008/np.cosh(t/pen)*np.sqrt(w/pen_perp/
-# 	(4*pen_perp/pen - 0.08301*pen/pen_perp)))
-
-J1 = Jnorm[idx]
-print(J1)
-
-#save data to csv file
+# Save data to csv file
 currentDensityFile = str(os.getcwd() + "/data_preprocess/current_density.csv")
 np.savetxt(currentDensityFile, np.column_stack((x,Jnorm)), delimiter=",")
+
+currentFile = str(os.getcwd() + "/data_preprocess/current.csv")
+np.savetxt(currentFile, np.column_stack((x,I)), delimiter=",")
 
 eFile = str(os.getcwd() + "/data_preprocess/electric_field.csv")
 np.savetxt(eFile, np.column_stack((x,E)), delimiter=",")
@@ -68,15 +48,16 @@ np.savetxt(eFile, np.column_stack((x,E)), delimiter=",")
 condFile = str(os.getcwd() + "/data_preprocess/conductivity.csv")
 np.savetxt(condFile, np.column_stack((x,sigma)), delimiter=",")
 
-plts = Plotting.Plotting
+# Plot data - can decide to show or not, and save or not
+plts = Plotting.Plotting()
 
 plt0 = plts.plot(x*1e6,I,colr = 'b',xlab='x ($\mu$m)',
 	ylab='$Current (A/m)$',filename='current.eps',
-	show='yes',save='no')
+	show='no',save='yes')
 
 plt1 = plts.plot(x*1e6,Jnorm*1e6,colr='r',xlab='x ($\mu$m)',
 	ylab='Current density\n (MAm$^{-2}$)',
-	filename='current_density.eps',show='yes',save='yes')
+	filename='current_density.eps',show='no',save='yes')
 
 plt2 = plts.plot(x*1e6,sigma,colr='g',xlab='x ($\mu$m)',
 	ylab='Conductivity\n ($S/m}$)',

@@ -68,6 +68,7 @@ class SetParams:
          f.close()
 
     def scp_params(self):
+        print('scp data to remote machine...')
         dir = str(os.getcwd()) + "/vacuum_flucs/set_comsol_data"
         rc = call(dir)
 
