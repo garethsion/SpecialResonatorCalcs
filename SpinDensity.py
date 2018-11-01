@@ -22,26 +22,22 @@ by_x,by_y,by_z = rdy.read_full_data()
 dbx = np.asarray(bx_z).astype(np.float)
 dby = np.asarray(by_z).astype(np.float)
 
-# Calculate the single spin coupling for each site each grid point
-theta = 0 # Angle the static magnetic field is applied on
-ang = np.cos(theta)
-ue = sp.physical_constants["Bohr magneton"][0]
-g = [*map(lambda x,y: 0.47 * ue * np.sqrt(y**2 + x**2),dbx,dby)]
-g = np.asarray([x / sp.h for x in g])
-
+# Postprocess data
 post = PostProcData.PostProcData()
 
-# hist, edges = post.spin_density(bx_x,bx_y,g)
+# Single spin couplinng for each point on mesh grid
+g = post.coupling(dbx,dby,theta=0)
+hist, edges = post.spin_density(bx_x,bx_y,g) # density
 
 # Calculate Purcell enhancement at each grid point
 Q = 10000 # Q factor - for now typed in, but will be found from CST calcs ultimately
 purcell = post.purcell_rate(g,Q)
+pdens, pedge = post.purcell_density(bx_x,bx_y,purcell) # density
+
 plt.plot(g,purcell)
 plt.show()
 
-pdens, pedge = post.purcell_density(bx_x,bx_y,purcell)
-
-plt.bar(pdens,height=pedge,alpha=0.15)
+#plt.bar(pedge,height=pdens,alpha=0.15)
 plt.plot(pedge,pdens)
 plt.show()
 

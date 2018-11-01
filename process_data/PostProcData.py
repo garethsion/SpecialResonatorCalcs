@@ -33,30 +33,25 @@ class PostProcData:
         rho =  sp.m_e / self.volume_cell
         return rho
 
-    def spin_density(self,x,y,g):
-        Ncell = self.ncell(x,y,g)
-
-        g = np.matlib.repmat(g, 1, Ncell)
-
+    def distribution(self,x,y,param,*args,**kwargs):
+        bin_num = kwargs.get('bins',500)
+        Ncell = self.ncell(x,y,param)
+        param = np.matlib.repmat(param, 1, Ncell)
+        
         # Calculate histogram
-        hist, edges = np.histogram(g, bins=500) # single spin
+        hist, edges = np.histogram(param, bins=bin_num) # single spin
         hist = hist * Ncell # with 3d box
         hist = hist / sum(hist) # normalize
         edges = edges[0:len(hist)] # shift bin edges to get the same length as data
+        return hist, edges
+
+    def spin_density(self,x,y,g):
+        hist, edges = self.distribution(x,y,g)
 
         return hist, edges
 
     def purcell_density(self,x,y,gamma):
-        Ncell = self.ncell(x,y,gamma)
-
-        gamma = np.matlib.repmat(gamma, 1, Ncell)
-
-        # Calculate histogram
-        hist, edges = np.histogram(gamma, bins=500) # single spin
-        hist = hist * Ncell # with 3d box
-        hist = hist / sum(hist) # normalize
-        edges = edges[0:len(hist)] # shift bin edges to get the same length as data
-
+        hist, edges = self.distribution(x,y,gamma)
         return hist, edges
 
     def ncell(self,x,y,param):
@@ -89,6 +84,15 @@ class PostProcData:
         # Calculates the Purcell enhancement induced by the cavity
         F = ( 3 / (4*np.pi**2) ) * (lambda_c / n)**3 * ( Q / (self.w * self.t * self.l))
         return F 
+
+    def coupling(self,dbx,dby,*args,**kwargs):
+        theta = kwargs.get('theta',0) # Angle the static magnetic field is applied on
+        theta=0
+        ang = np.cos(theta)
+        ue = sp.physical_constants["Bohr magneton"][0]
+        g = [*map(lambda x,y: 0.47 * ue * np.sqrt(y**2 + x**2),dbx,dby)]
+        g = np.asarray([x / sp.h for x in g])
+        return g
 
     def cooperativity(self):
         return
