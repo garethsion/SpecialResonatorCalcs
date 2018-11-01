@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import csv
 from vacuum_flucs import CPW
 from process_data import SetParams
+from ssh_command import SSHCommand
 import Plotting
 import os
 
@@ -33,7 +34,9 @@ sigma = cpw.conductivity() # Conductivity
 
 # Generate a parameter list for COMSOL modelling
 paramlist = setp.param_list(x,I,Jnorm) # Generate COMSOL parameter list
-setp.scp_params() # securely copy the generated parameter to remote machine
+
+sshc = SSHCommand.SSHCommand()
+sshc.scp_params() # securely copy the generated parameter to remote machine
 
 # Save data to csv file
 currentDensityFile = str(os.getcwd() + "/data_preprocess/current_density.csv")

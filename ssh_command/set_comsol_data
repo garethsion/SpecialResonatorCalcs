@@ -1,0 +1,9 @@
+#!/bin/bash
+# This bash file securely copies a parameter file to the remote machine which hosts the COMSOL module. The parameterlist file is renamed here to what we will call the COMSOL model onn the remote machine. I need to redo this to make it a bnit more general, as right now I require a login to gade.
+
+MODELNAME="cpw_vacuum_calcs.mph"
+DIR="./data_preprocess"
+PARAMFILE="${DIR}/${MODELNAME}.txt"
+cp "${DIR}/paramlist.txt" ${PARAMFILE}
+scp ${PARAMFILE} gade:/homes/gjones/COMSOL_files/parameter_files
+rm ${PARAMFILE}

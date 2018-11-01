@@ -1,0 +1,3 @@
+#!/bin/sh
+
+scp -r ../data_preprocess galaxy:Documents/preprocess_data 

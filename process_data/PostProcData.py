@@ -29,11 +29,13 @@ class PostProcData:
         return self.g/sp.h
 
     def cut_line_spin_density(self,g):
+        # Calculates the spin density for cut line section
         self.volume_cell = g * self.t * self.l
         rho =  sp.m_e / self.volume_cell
         return rho
 
     def distribution(self,x,y,param,*args,**kwargs):
+        # Method to calculate histogram
         bin_num = kwargs.get('bins',500)
         Ncell = self.ncell(x,y,param)
         param = np.matlib.repmat(param, 1, Ncell)
@@ -46,11 +48,13 @@ class PostProcData:
         return hist, edges
 
     def spin_density(self,x,y,g):
+        # Distribution of spins in resonator
         hist, edges = self.distribution(x,y,g)
 
         return hist, edges
 
     def purcell_density(self,x,y,gamma):
+        # Distribution of purcell rate in resomator
         hist, edges = self.distribution(x,y,gamma)
         return hist, edges
 
