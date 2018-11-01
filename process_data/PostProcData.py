@@ -86,8 +86,8 @@ class PostProcData:
         return F 
 
     def coupling(self,dbx,dby,*args,**kwargs):
+        # Coupling constant g, <m|Sx|m> * ue * sqrt(dby^2 + cos(theta) dbx^2) 
         theta = kwargs.get('theta',0) # Angle the static magnetic field is applied on
-        theta=0
         ang = np.cos(theta)
         ue = sp.physical_constants["Bohr magneton"][0]
         g = [*map(lambda x,y: 0.47 * ue * np.sqrt(y**2 + x**2),dbx,dby)]
