@@ -4,5 +4,5 @@
 HOST="galaxy"
 #REMOTEDIR="/homes/gjones/COMSOL_files/output"
 REMOTEDIR="Documents/comsol_datafiles"
-DOWNLOADDIR="../data_postprocess/downloads"
+DOWNLOADDIR="/data_postprocess/downloads"
 scp -r ${HOST}:${REMOTEDIR} ${DOWNLOADDIR}

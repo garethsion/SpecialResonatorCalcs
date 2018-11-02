@@ -14,7 +14,7 @@ class SSHCommand:
         print("Running COMSOL on remote machine...")
         rc = call("ssh_command/run_comsol")
 
-    def set_comsol_parameters(self):
+    def set_comsol_data(self):
         print("Uploading comsol parameter files...")
         rc = call("ssh_command/set_comsol_data")
 

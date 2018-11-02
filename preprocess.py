@@ -35,8 +35,8 @@ sigma = cpw.conductivity() # Conductivity
 # Generate a parameter list for COMSOL modelling
 paramlist = setp.param_list(x,I,Jnorm) # Generate COMSOL parameter list
 
-sshc = SSHCommand.SSHCommand()
-sshc.scp_params() # securely copy the generated parameter to remote machine
+# sshc = SSHCommand.SSHCommand()
+# sshc.scp_params() # securely copy the generated parameter to remote machine
 
 # Save data to csv file
 currentDensityFile = str(os.getcwd() + "/data_preprocess/current_density.csv")
