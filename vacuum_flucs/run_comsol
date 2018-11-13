@@ -1,6 +1,0 @@
-#!/bin/bash
-
-HOST=gade # remote computer
-
-echo "Running COMSOL on ${HOST}"
-ssh ${HOST} 'cd COMSOL_files && ./job input/cpw_vacuum_calcs.mph'; exit

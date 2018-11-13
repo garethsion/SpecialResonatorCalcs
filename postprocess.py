@@ -26,21 +26,37 @@ dby = np.asarray(by_z).astype(np.float)
 # Postprocess data
 post = PostProcData.PostProcData()
 
-# Single spin couplinng for each point on mesh grid
+# Single spin coupling for each point on mesh grid
 g = post.coupling(dbx,dby,theta=0)
 hist, edges = post.spin_density(bx_x,bx_y,g) # density
+
+gens = np.sqrt(sum(edges**2 * hist))
+print(gens)
 
 # Calculate Purcell enhancement at each grid point
 Q = 10000 # Q factor - for now typed in, but will be found from CST calcs ultimately
 purcell = post.purcell_rate(g,Q)
 pdens, pedge = post.purcell_density(bx_x,bx_y,purcell) # density
 
-# Determine theta depenndance of g
-theta = np.arange(0,2*np.pi,2*np.pi/100)
-g_theta = np.zeros((len(theta),len(g)),dtype=float)
+# Calculate total B1 field
+theta = 0
+B1 = post.B1(dbx, dby, theta)
 
-for t in range(len(theta)):
-    g_theta[t] = post.coupling(dbx,dby,theta=theta[t])
+# Calculate Larmor frequency
+gamma = 4.32e07 # Bismuth gyromagnetic ratio (rad/T*s)
+omega_larmor = post.larmor_omega(B1,gamma)
+tau = 1
+theta_larmor = post.larmor_theta(omega_larmor, tau)
+
+lardens, laredge = post.larmor_density(bx_x,by_y,theta_larmor)
+
+fig0, ax0 = plt.subplots(figsize=(6,4))
+ax0.plot(laredge, lardens)
+ax0.set_xlabel('$\\theta$',fontsize='24')
+ax0.set_ylabel('$\\rho$',fontsize='24')
+plt.tight_layout()
+plt.savefig(str(os.getcwd() + '/figs/' + 'theta_density.eps'))
+plt.show()
 
 fig1, ax1 = plt.subplots(figsize=(6,4))
 ax1.bar(edges,height=hist,alpha=0.15)

@@ -1,0 +1,7 @@
+CPW module
+==========
+
+.. automodule:: CPW
+    :members:
+    :undoc-members:
+    :show-inheritance:
