@@ -7,6 +7,7 @@ Postprocessing - Pi Pulse Fidelity
     from scipy import constants as sp
     import os
     import numpy as np
+    from matplotlib import pyplot as plt
     from process_data import ReadComsol,PostProcData
 
     # Read data from downloads
@@ -38,3 +39,13 @@ Postprocessing - Pi Pulse Fidelity
     theta_larmor = post.larmor_theta(omega_larmor, tau)
 
     lardens, laredge = post.larmor_density(bx_x,by_y,theta_larmor)
+
+    # Weight theta with contribution to spin signal
+    g_weight = np.zeros(len(laredge))
+    for i in range (0,len(laredge)-1):
+        g_weight[i] = sum(g[np.where(np.logical_and(theta_larmor>=laredge[i], theta_larmor<=laredge[i+1]))])
+
+    rho_weighted = lardens * g_weight**2
+
+    plt.plot(laredge,rho_weighted)
+    plt.show()

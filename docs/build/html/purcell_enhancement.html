@@ -87,9 +87,16 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Using the Package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="todo.html">To Do List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html#contact">Contact</a></li>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vacuumflucs.html">vacuum_flucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sshcommand.html">SSH_Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataprocess.html">process_data</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="current_density.html">Preprocessing - Determine the Current Density</a></li>
@@ -168,6 +175,7 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">sp</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span> <span class="nn">process_data</span> <span class="k">import</span> <span class="n">ReadComsol</span><span class="p">,</span><span class="n">PostProcData</span>
 
 <span class="c1"># Read data from downloads</span>
@@ -192,6 +200,16 @@
 <span class="n">Q</span> <span class="o">=</span> <span class="mi">10000</span> <span class="c1"># Q factor - for now typed in, but will be found from CST calcs ultimately</span>
 <span class="n">purcell</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">purcell_rate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="n">Q</span><span class="p">)</span>
 <span class="n">pdens</span><span class="p">,</span> <span class="n">pedge</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">purcell_density</span><span class="p">(</span><span class="n">bx_x</span><span class="p">,</span><span class="n">bx_y</span><span class="p">,</span><span class="n">purcell</span><span class="p">)</span> <span class="c1"># density</span>
+
+<span class="c1"># Weight by contribution to signal</span>
+<span class="n">g_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pedge</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">pedge</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">g_weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">purcell</span><span class="o">&gt;=</span><span class="n">pedge</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">purcell</span><span class="o">&lt;=</span><span class="n">pedge</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))])</span>
+
+<span class="n">rho_weighted</span> <span class="o">=</span> <span class="n">pdens</span> <span class="o">*</span> <span class="n">g_weight</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pedge</span><span class="p">,</span><span class="n">rho_weighted</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

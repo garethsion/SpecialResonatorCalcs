@@ -15,6 +15,8 @@ Guide
    installation
    usage
    todo
+   gallery
+   resources
    license
    help
 

@@ -1,5 +1,5 @@
 PostProcData
 ============
 
-.. automodule:: process_data.SetParams
+.. automodule:: SetParams
    :members:

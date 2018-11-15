@@ -1,5 +1,0 @@
-setup.py
-vacuum_flucs.egg-info/PKG-INFO
-vacuum_flucs.egg-info/SOURCES.txt
-vacuum_flucs.egg-info/dependency_links.txt
-vacuum_flucs.egg-info/top_level.txt
